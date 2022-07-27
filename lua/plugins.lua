@@ -1,6 +1,6 @@
 local ok, packer = pcall(require, 'packer')
 if not ok then
-  print ('packer.nvim not found!')
+  print('packer.nvim not found!')
   return
 end
 
@@ -25,7 +25,7 @@ return require('packer').startup(function(use)
   use 'sainnhe/gruvbox-material'
 
   -- statusline
-  use{
+  use {
     'nvim-lualine/lualine.nvim',
     config = function()
       require('config.lualine')
@@ -43,7 +43,7 @@ return require('packer').startup(function(use)
   -- git
   use {
     'lewis6991/gitsigns.nvim',
-    requires = {'nvim-lua/plenary.nvim'},
+    requires = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('config.gitsigns')
     end,
@@ -61,7 +61,7 @@ return require('packer').startup(function(use)
         "L3MON4D3/LuaSnip",
         requires = { "rafamadriz/friendly-snippets" },
         config = function()
-            require("luasnip.loaders.from_vscode").lazy_load()
+          require("luasnip.loaders.from_vscode").lazy_load()
         end,
       },
       { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' },
@@ -109,11 +109,40 @@ return require('packer').startup(function(use)
     "numToStr/Comment.nvim",
     keys = { "gcc", "gc", "gb" },
     config = function()
-        require("Comment").setup {
-            ignore = "^$",
-        }
+      require("Comment").setup {
+        ignore = "^$",
+      }
     end,
   }
+
+  use {
+    "phaazon/hop.nvim",
+    config = function()
+      require('config.hop')
+    end,
+  }
+
+  use({
+    'chentoast/marks.nvim',
+    config = function()
+      require('config.marks')
+    end,
+  })
+
+  -- telescope
+  use {
+    "nvim-telescope/telescope.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require('config.telescope')
+    end,
+  }
+
+  use {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    run = "make",
+  }
+
 
   if packer_bootstrap then
     require('packer').sync()
