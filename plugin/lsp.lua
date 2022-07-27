@@ -1,11 +1,11 @@
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_ok then
-   return
+  return
 end
 
 local lsp_signature_ok, lsp_signature = pcall(require, "lsp_signature")
 if not lsp_signature_ok then
-   return
+  return
 end
 
 local cwd = vim.loop.cwd
@@ -25,7 +25,7 @@ local on_attach = function(client, bufnr)
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
@@ -55,18 +55,18 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagn
 })
 
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-vim.lsp.handlers.hover,
-{ border = "single" }
+  vim.lsp.handlers.hover,
+  { border = "single" }
 )
- 
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true 
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
-    properties = {
-        "detail",
-        "documentation",
-        "additionalTextEdits",
-    },
+  properties = {
+    "detail",
+    "documentation",
+    "additionalTextEdits",
+  },
 }
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
@@ -76,7 +76,7 @@ lspconfig.tsserver.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   root_dir = cwd,
-}) 
+})
 
 -- npm i -g vscode-langservers-extracted
 lspconfig.jsonls.setup({
@@ -98,18 +98,49 @@ lspconfig.html.setup({
   capabilities = capabilities,
   root_dir = cwd,
 })
- 
+
 -- npm install -g vls
-lspconfig.vuels.setup ({
+lspconfig.vuels.setup({
   capabilities = capabilities,
-  on_attach = on_attach, 
-  root_dir = cwd, 
+  on_attach = on_attach,
+  root_dir = cwd,
 })
 
 -- npm install -g intelephense
 lspconfig.intelephense.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-  root_dir = cwd, 
+  on_attach = on_attach,
+  capabilities = capabilities,
+  root_dir = cwd,
 })
- 
+
+local root_dir = 'C:/Users/2W7N9W3/personal/nvim/servers/lua-language-server'
+local server_bin = '/bin/lua-language-server.exe'
+lspconfig.sumneko_lua.setup({
+  cmd = { root_dir .. server_bin, '-E', root_dir .. '/main.lua' },
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        globals = { 'vim' },
+      },
+      format = {
+        enable = true,
+        defaultConfig = {
+          indent_style = "space",
+          indent_size = "2",
+        }
+      },
+      completion = {
+        autoRequire = false,
+      },
+      hint = {
+        enable = true,
+      },
+      telemetry = {
+        enable = false, -- Do not send telemetry data containing a randomized but unique identifier
+      },
+    },
+  },
+})
